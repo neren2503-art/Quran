@@ -1,16 +1,33 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+
+                
+              </style>
+                        </head>
+                        <body>
+                            <!-- ====== index.html ====== -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>المصحف الشريف</title>
-  <link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b1310">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="المصحف">
-<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/amiri@5/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/reem-kufi@5/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tajawal@5/index.css">
@@ -48,14 +65,26 @@ html[data-theme="dark"]{
 html,body{height:100%;overflow-x:clip;max-width:100%}
 body{
   font-family:'Tajawal',sans-serif;
-  background:radial-gradient(1200px 600px at 50% -100px, var(--glow), transparent 60%),linear-gradient(160deg,var(--bg1),var(--bg2));
-  background-attachment:fixed;color:var(--ink);min-height:100dvh;
+  background:linear-gradient(160deg,var(--bg1),var(--bg2));
+  color:var(--ink);min-height:100dvh;
   transition:background var(--trans-speed), color var(--trans-speed);
 }
-body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23c9a227' stroke-opacity='0.06'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 12 L68 40 L40 68 L12 40 Z'/%3E%3C/g%3E%3C/svg%3E");}
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer;touch-action:manipulation}
 ::selection{background:var(--gold-soft)}
+
+/* شاشة الإقلاع */
+#splash{position:fixed;inset:0;z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;background:linear-gradient(160deg,var(--bg1),var(--bg2));transition:opacity .6s ease,visibility .6s}
+#splash.hide{opacity:0;visibility:hidden}
+.sp-wrap{position:relative;width:84px;height:84px}
+.sp-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--gold-soft);border-top-color:var(--gold);animation:spin 1s linear infinite}
+.sp-ring2{position:absolute;inset:10px;border-radius:50%;border:2px dashed var(--gold-soft);animation:spin 6s linear infinite reverse}
+.sp-glyph{position:absolute;inset:0;display:grid;place-items:center;font-size:1.7rem;color:var(--gold)}
+.sp-title{font-family:'Reem Kufi',sans-serif;font-size:1.7rem;color:var(--gold);animation:fadeUp .8s .1s both}
+.sp-sub{font-size:.8rem;color:var(--ink-soft);animation:fadeUp .8s .3s both;display:flex;gap:4px;align-items:center}
+.sp-sub i{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:tp 1s infinite ease-in-out}
+.sp-sub i:nth-child(2){animation-delay:.15s}.sp-sub i:nth-child(3){animation-delay:.3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes tp{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
 
 #topLoader{position:fixed;top:0;right:0;left:0;height:3px;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
 #topLoader.on{opacity:1}
@@ -86,8 +115,8 @@ header{position:sticky;top:0;z-index:90;background:color-mix(in srgb,var(--card)
 #sidebar.on{right:0}
 .sb-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.1rem .7rem}
 .sb-head h2{font-family:'Reem Kufi',sans-serif;font-size:1.15rem;color:var(--gold)}
-.sb-tabs{display:flex;gap:.35rem;padding:0 1.1rem .8rem;border-bottom:1px solid var(--line)}
-.sb-tabs button{flex:1;padding:.55rem;border-radius:10px 10px 0 0;font-size:.85rem;font-weight:600;color:var(--ink-soft);border-bottom:2.5px solid transparent;transition:all .25s}
+.sb-tabs{display:flex;gap:.3rem;padding:0 1.1rem .8rem;border-bottom:1px solid var(--line)}
+.sb-tabs button{flex:1;padding:.55rem .2rem;border-radius:10px 10px 0 0;font-size:.8rem;font-weight:700;color:var(--ink-soft);border-bottom:2.5px solid transparent;transition:all .25s}
 .sb-tabs button.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--green-soft)}
 .sb-body{flex:1;overflow-y:auto;padding:.8rem 1.1rem 2rem;scrollbar-width:thin}
 .sb-body::-webkit-scrollbar{width:5px}.sb-body::-webkit-scrollbar-thumb{background:var(--gold-soft);border-radius:5px}
@@ -101,10 +130,41 @@ header{position:sticky;top:0;z-index:90;background:color-mix(in srgb,var(--card)
 .surah-badge::after{transform:rotate(45deg)}
 .surah-badge span{position:relative;z-index:1}
 .list-item .info{flex:1;min-width:0}
-.list-item .info h4{font-family:'Reem Kufi',sans-serif;font-size:1rem;color:var(--ink)}
+.list-item .info h4{font-family:'Reem Kufi',sans-serif;font-size:1.1rem;color:var(--ink);line-height:1.5}
 .list-item .info small{font-size:.7rem;color:var(--ink-soft)}
 .list-item .go{font-size:.72rem;color:var(--gold);opacity:.8;white-space:nowrap}
 .empty-note{text-align:center;color:var(--ink-soft);padding:2.5rem 1rem;font-size:.9rem;line-height:1.9}
+
+/* منتقي الآيات داخل الفهرس */
+.ay-back{display:flex;align-items:center;gap:.4rem;font-size:.8rem;font-weight:700;color:var(--ink-soft);padding:.4rem .7rem;border-radius:10px;border:1px solid var(--line);margin-bottom:.7rem;transition:all .2s}
+.ay-back:hover{color:var(--gold);border-color:var(--gold)}
+.ay-title{font-family:'Reem Kufi',sans-serif;font-size:1.25rem;color:var(--gold);text-align:center;margin-bottom:.2rem}
+.ay-meta{text-align:center;font-size:.72rem;color:var(--ink-soft);margin-bottom:.7rem}
+.ay-stepper{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.4rem 0 .7rem}
+.ay-stepper button{padding:.55rem .9rem;border-radius:11px;border:1px solid var(--line);background:var(--card2);font-size:.8rem;font-weight:700;transition:all .2s}
+.ay-stepper button:hover{border-color:var(--gold);color:var(--gold)}
+.ay-stepper b{font-family:'Amiri',serif;font-size:1.6rem;color:var(--gold);min-width:60px;text-align:center}
+.ay-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:.35rem;max-height:38vh;overflow-y:auto;padding:.2rem;scrollbar-width:thin}
+.ay-grid::-webkit-scrollbar{width:4px}.ay-grid::-webkit-scrollbar-thumb{background:var(--gold-soft);border-radius:4px}
+.ay-grid button{padding:.5rem 0;border-radius:9px;border:1px solid var(--line);background:var(--card2);font-size:.8rem;font-weight:700;color:var(--ink-soft);transition:all .18s}
+.ay-grid button:hover{border-color:var(--gold-soft);color:var(--gold)}
+.ay-grid button.sel{border-color:var(--gold);color:var(--gold);background:var(--glow);box-shadow:0 0 0 1px var(--gold-soft)}
+.ay-go{width:100%;margin-top:.8rem;padding:.75rem;border-radius:13px;background:linear-gradient(135deg,var(--green),color-mix(in srgb,var(--green) 60%,var(--gold)));color:#fff;font-weight:700;font-size:.9rem;box-shadow:0 8px 18px rgba(15,81,50,.3);transition:transform .2s}
+.ay-go:active{transform:scale(.97)}
+
+/* النبذة */
+.about h3{font-family:'Reem Kufi',sans-serif;color:var(--gold);font-size:1.15rem;margin-bottom:.7rem}
+.about p{font-size:.9rem;line-height:2;margin-bottom:.7rem;color:var(--ink)}
+.about p b{color:var(--gold);font-size:1rem}
+.about ul{padding-right:1.2rem;margin-bottom:.9rem}
+.about li{font-size:.85rem;line-height:2;color:var(--ink-soft)}
+.about li::marker{color:var(--gold)}
+.mail{display:inline-block;padding:.6rem 1.1rem;border-radius:12px;background:var(--glow);border:1px solid var(--gold-soft);color:var(--gold);font-weight:700;font-size:.88rem;direction:ltr;transition:all .2s}
+.mail:hover{border-color:var(--gold);transform:translateY(-1px)}
+.duaa{text-align:center;margin-top:1rem;color:var(--green);font-weight:700;font-size:.9rem}
+html[data-theme="dark"] .duaa{color:var(--gold)}
+.about .install-btn{width:100%;margin-top:.9rem;padding:.7rem;border-radius:13px;border:1px dashed var(--gold-soft);color:var(--gold);font-weight:700;font-size:.85rem;transition:all .2s}
+.about .install-btn:hover{background:var(--glow)}
 
 main{position:relative;z-index:1;padding:1.2rem 1rem calc(var(--footer-h) + 26px);max-width:860px;margin:0 auto;width:100%}
 .page-card{position:relative;background:var(--card);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:10px;transition:background var(--trans-speed);max-width:100%;overflow:hidden}
@@ -186,6 +246,16 @@ footer{position:fixed;bottom:0;right:0;left:0;z-index:95;height:var(--footer-h);
 #ayahBar button{display:flex;align-items:center;gap:.3rem;padding:.48rem .75rem;border-radius:10px;border:1px solid var(--line);font-size:.75rem;font-weight:600;color:var(--ink-soft);transition:all .2s;white-space:nowrap}
 #ayahBar button:hover{color:var(--gold);border-color:var(--gold)}
 
+/* بانر تثبيت التطبيق */
+#installBanner{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;display:flex;align-items:center;gap:.65rem;background:var(--card);border:1px solid var(--gold-soft);border-radius:16px;padding:.7rem .9rem;box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:all .35s var(--smooth);max-width:94vw}
+#installBanner.on{opacity:1;transform:translateX(-50%);pointer-events:auto}
+.ib-icon{font-size:1.7rem}
+.ib-txt{flex:1;min-width:0}
+.ib-txt b{display:block;font-size:.88rem;color:var(--ink)}
+.ib-txt small{font-size:.7rem;color:var(--ink-soft);line-height:1.5;display:block}
+#ibInstall{padding:.55rem 1rem;border-radius:11px;background:linear-gradient(135deg,var(--green),color-mix(in srgb,var(--green) 60%,var(--gold)));color:#fff;font-weight:700;font-size:.82rem;white-space:nowrap}
+#ibLater{padding:.55rem .7rem;border-radius:11px;border:1px solid var(--line);color:var(--ink-soft);font-size:.78rem;font-weight:600;white-space:nowrap}
+
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:140;opacity:0;pointer-events:none;transition:opacity .3s}
 .sheet-overlay.on{opacity:1;pointer-events:auto}
 .sheet{position:fixed;inset:auto 0 0 0;max-height:88dvh;z-index:150;background:var(--card);border-radius:24px 24px 0 0;border-top:2px solid var(--gold-soft);transform:translateY(100%);transition:transform .42s cubic-bezier(.22,.9,.3,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,.4)}
@@ -213,7 +283,7 @@ html[data-theme="dark"] .tafsir-sec h4{color:var(--gold)}
 .tafsir-sec h4::before{content:"❖";color:var(--gold);font-size:.8rem}
 .tafsir-sec p{font-size:1.02rem;line-height:2;color:var(--ink);text-align:justify;overflow-wrap:break-word}
 
-/* ================= واجهة التسبيح — المدار الذهبي ================= */
+/* ================= التسبيح ================= */
 #tasbihView{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:1.2rem 1rem 3rem}
 .t-card{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:1.5rem 1.2rem 1.8rem;position:relative;overflow:hidden;transition:background var(--trans-speed)}
 .t-card::before{content:"";position:absolute;inset:0;background:radial-gradient(460px 240px at 50% -50px,var(--glow),transparent 70%);pointer-events:none}
@@ -229,7 +299,6 @@ html[data-theme="dark"] .tafsir-sec h4{color:var(--gold)}
 .t-custom input{flex:1;padding:.6rem .9rem;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.88rem;transition:border-color .2s,box-shadow .2s}
 .t-custom input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
 .t-custom button{padding:.6rem 1rem;border-radius:12px;background:var(--green);color:#fff;font-weight:700;font-size:.82rem;transition:transform .2s,box-shadow .2s}
-.t-custom button:hover{box-shadow:0 6px 14px rgba(15,81,50,.3)}
 .t-custom button:active{transform:scale(.94)}
 .t-targets{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
 .t-targets button{min-width:56px;padding:.5rem .75rem;border-radius:11px;border:1px solid var(--line);background:var(--card2);font-size:.85rem;font-weight:700;color:var(--ink-soft);transition:all .25s var(--smooth)}
@@ -238,36 +307,29 @@ html[data-theme="dark"] .tafsir-sec h4{color:var(--gold)}
 .t-targets input{width:92px;padding:.5rem .6rem;border-radius:11px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;text-align:center;font-size:.85rem;transition:border-color .2s,box-shadow .2s}
 .t-targets input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
 
-/* المدار — الضغط على الدائرة نفسها يزيد العد */
+/* المدار — خفيف وسلس: بدون فلاتر SVG ثقيلة، والعد بالنقر فقط */
 .orbit-wrap{
-  position:relative;width:min(340px,86vw);margin:1.6rem auto .5rem;will-change:transform;
-  cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;
-  transition:transform .16s var(--smooth);
+  position:relative;width:min(340px,86vw);margin:1.6rem auto .5rem;
+  cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:pan-y;
 }
-.orbit-wrap:active{transform:scale(.975)}
-.orbit-wrap.pop{animation:opop .45s var(--smooth)}
-@keyframes opop{0%{transform:scale(1)}30%{transform:scale(1.028)}100%{transform:scale(1)}}
-.orbit-halo{position:absolute;inset:-9%;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);opacity:.65;animation:halo 5s infinite ease-in-out;pointer-events:none;transition:opacity .5s}
-@keyframes halo{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.07);opacity:.9}}
+.orbit-halo{position:absolute;inset:-9%;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);opacity:.6;animation:halo 5s infinite ease-in-out;pointer-events:none}
+@keyframes halo{0%,100%{opacity:.45}50%{opacity:.85}}
 .orbit{width:100%;display:block;transform:rotate(-90deg);overflow:visible}
 .tick-ring{fill:none;stroke:var(--gold-soft);stroke-width:2;stroke-dasharray:1.5 11;stroke-linecap:round;transform-box:view-box;transform-origin:170px 170px;animation:tickspin 90s linear infinite}
 @keyframes tickspin{to{transform:rotate(360deg)}}
 .track{fill:none;stroke:var(--line);stroke-width:10}
-.arc{fill:none;stroke:url(#arcGrad);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .55s var(--smooth)}
-.mstar{fill:var(--line);opacity:.75;transform-box:fill-box;transform-origin:center;transition:fill .5s var(--smooth),transform .5s var(--smooth),opacity .5s,filter .5s}
-.mstar.lit{fill:var(--gold);opacity:1;transform:scale(1.5);filter:drop-shadow(0 0 7px var(--gold))}
+.arc{fill:none;stroke:url(#arcGrad);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .45s var(--smooth)}
+.mstar{fill:var(--line);opacity:.75;transform-box:fill-box;transform-origin:center;transition:fill .4s var(--smooth),transform .4s var(--smooth),opacity .4s}
+.mstar.lit{fill:var(--gold);opacity:1;transform:scale(1.5)}
 .orbit-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;text-align:center;pointer-events:none;padding:0 3.2rem}
 .orbit-center b{font-family:'Amiri',serif;font-size:4.2rem;line-height:1.1;color:var(--gold);text-shadow:0 2px 26px var(--glow);min-height:1.1em;font-feature-settings:"tnum"}
 .orbit-center span{font-size:.86rem;color:var(--ink-soft);font-weight:700}
 .orbit-center small{font-size:.8rem;color:var(--green);font-weight:700;margin-top:.3rem;line-height:1.55;transition:color .3s}
 html[data-theme="dark"] .orbit-center small{color:var(--gold)}
-.orbit-wrap.done .arc{filter:drop-shadow(0 0 11px var(--gold))}
+.orbit-wrap.done .arc{stroke-width:12}
 .orbit-wrap.done .orbit-halo{animation-duration:2s}
 .ripple{position:absolute;inset:0;margin:auto;width:60%;aspect-ratio:1;border-radius:50%;border:2px solid var(--gold-soft);opacity:0;pointer-events:none}
-.ripple.go{animation:rip .7s var(--smooth)}
-@keyframes rip{0%{opacity:.7;transform:scale(.6)}100%{opacity:0;transform:scale(1.28)}}
 .t-hint{text-align:center;font-size:.72rem;color:var(--ink-soft);margin:.35rem 0 1rem;opacity:.85}
-
 .t-actions{display:flex;gap:.5rem}
 .t-actions button{flex:1;display:flex;align-items:center;justify-content:center;gap:.45rem;padding:.78rem;border-radius:14px;border:1px solid var(--line);background:var(--card2);font-size:.86rem;font-weight:700;color:var(--ink-soft);transition:all .25s var(--smooth)}
 .t-actions button:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
@@ -298,14 +360,22 @@ html[data-theme="dark"] .orbit-center small{color:var(--gold)}
   #tasbihView{padding:.9rem .6rem 2.4rem}
   .t-card{padding:1.15rem .85rem 1.5rem}
   .orbit-center b{font-size:3.6rem}
+  #installBanner{bottom:80px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 </style>
 </head>
-  <script>
-if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
-  </script>
 <body>
+
+<div id="splash">
+  <div class="sp-wrap">
+    <div class="sp-ring"></div>
+    <div class="sp-ring2"></div>
+    <div class="sp-glyph">۩</div>
+  </div>
+  <div class="sp-title">المصحف الشريف</div>
+  <div class="sp-sub">جارٍ الإعداد <i></i><i></i><i></i></div>
+</div>
 
 <div id="topLoader"></div>
 
@@ -339,11 +409,12 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
 
 <div id="overlay"></div>
 <aside id="sidebar">
-  <div class="sb-head"><h2>❁ فهرس المصحف</h2><button class="icon-btn" id="closeSidebar" style="width:34px;height:34px">✕</button></div>
+  <div class="sb-head"><h2>❁ المصحف الشريف</h2><button class="icon-btn" id="closeSidebar" style="width:34px;height:34px">✕</button></div>
   <div class="sb-tabs">
-    <button class="active" data-tab="surahs">السور</button>
+    <button class="active" data-tab="index">الفهرس</button>
     <button data-tab="juz">الأجزاء</button>
     <button data-tab="marks">علاماتي</button>
+    <button data-tab="about">النبذة</button>
   </div>
   <div class="sb-body" id="sbBody"></div>
 </aside>
@@ -369,7 +440,6 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
   </div>
 </main>
 
-<!-- واجهة التسبيح -->
 <section id="tasbihView" hidden>
   <div class="t-card">
     <div class="t-title">📿 المسبحة الإلكترونية</div>
@@ -399,15 +469,11 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
             <stop offset="65%" stop-color="rgba(201,162,39,.05)"/>
             <stop offset="100%" stop-color="rgba(201,162,39,0)"/>
           </radialGradient>
-          <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="4" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
         </defs>
         <circle cx="170" cy="170" r="152" fill="url(#coreGrad)"/>
         <circle class="tick-ring" cx="170" cy="170" r="160"/>
         <circle class="track" cx="170" cy="170" r="140"/>
-        <circle class="arc" id="arcFg" cx="170" cy="170" r="140" filter="url(#softGlow)"/>
+        <circle class="arc" id="arcFg" cx="170" cy="170" r="140"/>
         <g id="starsG"></g>
       </svg>
       <div class="orbit-center">
@@ -433,7 +499,7 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
     <button class="nav-btn" id="prevBtn">التالي<svg viewBox="0 0 24 24"><path d="M15.4 2.6 6 12l9.4 9.4 1.4-1.4L8.8 12l8-8z"/></svg></button>
     <div class="page-indicator" id="pageIndicator">
       <b id="pageNumTxt">١</b>
-      <span>من ٦٠ — انقر للانتقال</span>
+      <span>من ٦٠٤ — انقر للانتقال</span>
       <div class="jump-pop" id="jumpPop">
         <input type="number" id="jumpInput" min="1" max="604" placeholder="رقم الصفحة">
         <button id="jumpGo">انتقال</button>
@@ -451,7 +517,13 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
   <button id="abClose">✕</button>
 </div>
 
-<!-- خيارات الاستماع -->
+<div id="installBanner">
+  <div class="ib-icon">📲</div>
+  <div class="ib-txt"><b>ثبّت تطبيق المصحف على هاتفك</b><small id="ibSub">أيقونة خاصة، عمل بدون إنترنت، وتجربة تطبيق كامل</small></div>
+  <button id="ibInstall">تثبيت</button>
+  <button id="ibLater">لاحقًا</button>
+</div>
+
 <div class="sheet-overlay" id="playMenuOverlay"></div>
 <div class="sheet mini" id="playMenuSheet">
   <div class="sheet-head"><h3 id="playMenuTitle">🎧 خيارات الاستماع</h3><button class="icon-btn" id="playMenuClose" style="width:34px;height:34px">✕</button></div>
@@ -461,7 +533,6 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
   </div>
 </div>
 
-<!-- نافذة التفسير -->
 <div class="sheet-overlay" id="tafsirOverlay"></div>
 <div class="sheet" id="tafsirSheet">
   <div class="sheet-head"><h3>📖 <span id="tafsirTitle">التفسير</span></h3><button class="icon-btn" id="tafsirClose" style="width:34px;height:34px">✕</button></div>
@@ -472,10 +543,9 @@ if ("serviceWorker" in navigator) addEventListener("load", () => navigator.servi
 <audio id="audioEl"></audio>
 
 <script>
-/* ================= الأرقام العربية الهندية ================= */
 const toAr=n=>String(n).replace(/\d/g,d=>String.fromCharCode(0x660+Number(d)));
+const BOOT_T0=performance.now();
 
-/* ================= البيانات ================= */
 const SURAHS=[
 [1,"الفاتحة",7,1,1],[2,"البقرة",286,0,2],[3,"آل عمران",200,0,50],[4,"النساء",176,0,77],
 [5,"المائدة",120,0,106],[6,"الأنعام",165,1,128],[7,"الأعراف",206,1,151],[8,"الأنفال",75,0,177],
@@ -521,7 +591,8 @@ const state={
   cache:new Map(),pageCache:new Map(),
   animLock:false,data:null,selected:null,
   audioQueue:[],audioIdx:-1,audioMode:null,audioPending:false,
-  audioEndsSurah:false,audioSurahName:""
+  audioEndsSurah:false,audioSurahName:"",
+  sbSurah:null,sbAyah:1
 };
 const $=id=>document.getElementById(id);
 const pageContent=$("pageContent"),viewport=$("pageViewport"),topLoader=$("topLoader"),audioEl=$("audioEl");
@@ -531,6 +602,14 @@ function cleanText(t){if(!t)return"";const d=document.createElement("textarea");
 function stripBasmala(text,s,n){if(n===1&&s!==1&&s!==9){const w=text.split(" ");if(w[0]&&w[0].replace(/[\u064B-\u0652\u0670\u0640]/g,"").startsWith("بسم"))return w.slice(4).join(" ")}return text}
 const surahOf=n=>SURAHS[n-1];
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function hideSplash(){
+  const wait=Math.max(0,1000-(performance.now()-BOOT_T0));
+  setTimeout(()=>{
+    const sp=$("splash");
+    sp.classList.add("hide");
+    setTimeout(()=>sp.remove(),700);
+  },wait);
+}
 
 /* ================= جلب المصحف ================= */
 async function fetchPageData(p){
@@ -553,17 +632,21 @@ async function getPageData(p){
   return d;
 }
 function prefetch(p){if(p>=1&&p<=TOTAL_PAGES&&!state.cache.has(p))getPageData(p).catch(()=>{})}
-async function resolveStartPage(kind,n,fallback){
-  const key=kind+n;
+async function fetchPageForAyah(g){
+  const key="ay"+g;
   if(state.pageCache.has(key))return state.pageCache.get(key);
   try{
-    const g=kind==="surah"?globalNum(n,1):globalNum(JUZ_STARTS[n-1][0],JUZ_STARTS[n-1][1]);
     const r=await fetch(`https://api.alquran.cloud/v1/ayah/${g}/quran-uthmani`);
     if(!r.ok)throw 0;
     const j=await r.json();
     if(j.code!==200||!j.data||!j.data.page)throw 0;
     state.pageCache.set(key,j.data.page);return j.data.page;
-  }catch(e){return fallback}
+  }catch(e){return null}
+}
+async function resolveStartPage(kind,n,fallback){
+  const g=kind==="surah"?globalNum(n,1):globalNum(JUZ_STARTS[n-1][0],JUZ_STARTS[n-1][1]);
+  const p=await fetchPageForAyah(g);
+  return p||fallback;
 }
 
 /* ================= العرض ================= */
@@ -682,6 +765,16 @@ function swapContent(data,dir){
   }
   setTimeout(()=>{state.animLock=false},620);
 }
+function flashAyah(g){
+  setTimeout(()=>{
+    const el=document.querySelector(`[data-g="${g}"]`);
+    if(el){
+      el.scrollIntoView({behavior:"smooth",block:"center"});
+      el.classList.add("selected");
+      setTimeout(()=>el.classList.remove("selected"),2600);
+    }
+  },420);
+}
 
 /* السحب الأفقي */
 (function setupSwipe(){
@@ -776,13 +869,10 @@ $("pmContinue").onclick=()=>{
   startQueue(q.globals,0,"continuous");
   toast("📖 القراءة الكاملة حتى نهاية السورة");
 };
-/* طابور القراءة الكاملة: يتوقف عند آخر آية من السورة الحالية */
 function continuousQueueFrom(ayahs,startIdx){
   let endIdx=ayahs.length-1,ends=false,name="";
   for(let i=startIdx;i<ayahs.length;i++){
-    if(ayahs[i].numberInSurah===ayahs[i].surah.numberOfAyahs){
-      endIdx=i;ends=true;name=ayahs[i].surah.name.replace("سورة ","");break;
-    }
+    if(ayahs[i].numberInSurah===ayahs[i].surah.numberOfAyahs){endIdx=i;ends=true;name=ayahs[i].surah.name.replace("سورة ","");break}
   }
   state.audioEndsSurah=ends;state.audioSurahName=name;
   return {globals:ayahs.slice(startIdx,endIdx+1).map(a=>a.number),ends,name};
@@ -805,14 +895,9 @@ function playCurrent(){
   const g=state.audioQueue[state.audioIdx];
   if(g==null){
     if(state.audioMode==="continuous"){
-      if(state.audioEndsSurah){
-        const name=state.audioSurahName;
-        stopAudio();
-        toast(`✓ انتهت تلاوة سورة ${name}`);
-      }else if(state.page<TOTAL_PAGES){
-        state.audioPending=true;
-        goToPage(state.page+1,"next",false,true);
-      }else{stopAudio();toast("انتهت التلاوة ✓")}
+      if(state.audioEndsSurah){const name=state.audioSurahName;stopAudio();toast(`✓ انتهت تلاوة سورة ${name}`)}
+      else if(state.page<TOTAL_PAGES){state.audioPending=true;goToPage(state.page+1,"next",false,true)}
+      else{stopAudio();toast("انتهت التلاوة ✓")}
     }else{stopAudio();toast("انتهت التلاوة ✓")}
     return;
   }
@@ -886,7 +971,7 @@ async function openTafsir(g){
 function closeTafsir(){$("tafsirOverlay").classList.remove("on");$("tafsirSheet").classList.remove("on")}
 $("tafsirClose").onclick=closeTafsir;$("tafsirOverlay").onclick=closeTafsir;
 
-/* ================= المسبحة — المدار الذهبي ================= */
+/* ================= المسبحة ================= */
 const T_PRESETS=["سُبْحَانَ اللهِ","الحَمْدُ لِلَّهِ","اللهُ أَكْبَرُ","لَا إِلَهَ إِلَّا اللهُ","أَسْتَغْفِرُ اللهَ العَظِيمَ","سُبْحَانَ رَبِّيَ الأَعْلَى","سُبْحَانَ رَبِّيَ العَظِيمِ","اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ","لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ","حَسْبِيَ اللهُ وَنِعْمَ الوَكِيلُ","سُبْحَانَ اللهِ وَبِحَمْدِهِ سُبْحَانَ اللهِ العَظِيمِ"];
 const T_TARGETS=[33,99,200,500,1000];
 const ARC_C=2*Math.PI*140;
@@ -934,26 +1019,36 @@ function syncTasbih(){
   $("tTotal").textContent=toAr(tasbih.total);
   const prog=tasbih.target>0?Math.min(1,tasbih.count/tasbih.target):0;
   arcFg.style.strokeDashoffset=ARC_C*(1-prog);
-  document.querySelectorAll(".mstar").forEach(st=>{
-    st.classList.toggle("lit",prog>=(+st.dataset.f)/8-1e-9);
-  });
+  document.querySelectorAll(".mstar").forEach(st=>st.classList.toggle("lit",prog>=(+st.dataset.f)/8-1e-9));
   $("orbitWrap").classList.toggle("done",tasbih.count>=tasbih.target&&tasbih.target>0);
 }
 function tasbihIncrement(){
   tasbih.count++;tasbih.total++;
   syncTasbih();saveTasbih();
-  const ow=$("orbitWrap");
-  ow.classList.remove("pop");void ow.offsetWidth;ow.classList.add("pop");
-  const rp=$("ripple");
-  rp.classList.remove("go");void rp.offsetWidth;rp.classList.add("go");
+  /* حركات خفيفة عبر WAAPI بدون إعادة تدفق الصفحة */
+  $("orbitWrap").animate([{transform:"scale(1)"},{transform:"scale(1.028)",offset:.3},{transform:"scale(1)"}],{duration:380,easing:"ease-out"});
+  $("ripple").animate([{opacity:.7,transform:"scale(.6)"},{opacity:0,transform:"scale(1.28)"}],{duration:650,easing:"ease-out"});
   if(navigator.vibrate)navigator.vibrate(12);
   if(tasbih.count===tasbih.target){
     toast("🎉 تقبّل الله! أتممت الهدف بالكامل");
     if(navigator.vibrate)navigator.vibrate([60,80,60]);
   }
 }
-/* الضغط على الدائرة نفسها يزيد العد */
-$("orbitWrap").addEventListener("pointerdown",e=>{e.preventDefault();tasbihIncrement()});
+/* العد بالنقر المباشر فقط: حركة التمرير لا تُحتسب */
+(function tapGuard(){
+  const ow=$("orbitWrap");
+  let px=0,py=0,moved=0,down=false;
+  ow.addEventListener("pointerdown",e=>{down=true;moved=0;px=e.clientX;py=e.clientY});
+  ow.addEventListener("pointermove",e=>{
+    if(!down)return;
+    moved=Math.max(moved,Math.abs(e.clientX-px)+Math.abs(e.clientY-py));
+  });
+  ow.addEventListener("pointerup",()=>{down=false});
+  ow.addEventListener("click",e=>{
+    if(moved>12)return;      /* سحب/تقليب → لا يُحتسب */
+    tasbihIncrement();
+  });
+})();
 $("tUndo").onclick=()=>{if(tasbih.count>0){tasbih.count--;syncTasbih();saveTasbih()}};
 $("tReset").onclick=()=>{tasbih.count=0;syncTasbih();saveTasbih();toast("تم تصفير العدّاد")};
 $("tCustomSave").onclick=()=>{
@@ -976,6 +1071,117 @@ function setView(v){
   window.scrollTo({top:0});
 }
 document.querySelectorAll("#viewSeg button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+
+/* ================= الشريط الجانبي: الفهرس + الأجزاء + علاماتي + النبذة ================= */
+function openSidebar(){renderTab(curTab);$("sidebar").classList.add("on");$("overlay").classList.add("on")}
+function closeSidebar(){$("sidebar").classList.remove("on");$("overlay").classList.remove("on")}
+$("menuBtn").onclick=openSidebar;$("closeSidebar").onclick=closeSidebar;$("overlay").onclick=closeSidebar;
+let curTab="index";
+document.querySelectorAll(".sb-tabs button").forEach(b=>{b.onclick=()=>{document.querySelectorAll(".sb-tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");curTab=b.dataset.tab;renderTab(curTab)}});
+
+function renderTab(tab){
+  const body=$("sbBody");
+  if(tab==="index"){
+    if(!state.sbSurah){
+      body.innerHTML=`<input id="surahSearch" placeholder="🔍 ابحث عن سورة…"><div id="surahResults">${surahListHTML(SURAHS)}</div>`;
+      $("surahSearch").addEventListener("input",e=>{const q=e.target.value.trim();$("surahResults").innerHTML=surahListHTML(SURAHS.filter(s=>s.name.includes(q)||String(s.n)===q))});
+      body.querySelectorAll(".list-item").forEach(it=>{
+        it.onclick=()=>{state.sbSurah=SURAHS[+it.dataset.n-1];state.sbAyah=1;renderTab("index")};
+      });
+    }else{
+      renderAyahPicker(body);
+    }
+  }else if(tab==="juz"){
+    body.innerHTML=JUZ_PAGES.map((p,i)=>`<button class="list-item" data-kind="juz" data-n="${i+1}" data-page="${p}">
+      <div class="surah-badge"><span>${toAr(i+1)}</span></div>
+      <div class="info"><h4>الجزء ${JUZ_NAMES[i]}</h4><small>يبدأ من الصفحة ${toAr(p)}</small></div>
+      <span class="go">انتقال ←</span></button>`).join("");
+    bindNavItems(body);
+  }else if(tab==="marks"){
+    body.innerHTML=state.bookmarks.length?state.bookmarks.map(p=>{const s=SURAHS.filter(x=>x.page<=p).pop();
+      return `<button class="list-item" data-page="${p}" data-direct="1"><div class="surah-badge"><span>★</span></div>
+      <div class="info"><h4>الصفحة ${toAr(p)}</h4><small>ضمن سورة ${s.name}</small></div><span class="go">انتقال ←</span></button>`}).join("")
+      :`<div class="empty-note">لا توجد علامات محفوظة بعد.<br>اضغط ☆ أسفل الصفحة لإضافة علامة.</div>`;
+    bindNavItems(body);
+  }else if(tab==="about"){
+    body.innerHTML=`<div class="about">
+      <h3>✨ نبذة عن التطبيق</h3>
+      <p>تم تطوير هذا الموقع بواسطة <b>علي سيد فتحي</b>.</p>
+      <p>الغرض منه هو الاستفادة وتعلّم القرآن الكريم وتسهيل الأمور على كل مسلم ومسلمة: قراءة ميسّرة برواية حفص، تلاوة عطرة، تفسير واضح، ومسبحة إلكترونية مريحة للذكر.</p>
+      <ul>
+        <li>مجاني بالكامل وغير ربحي.</li>
+        <li>لا يحتوي على أي إعلانات إطلاقًا.</li>
+        <li>لا يجمع بياناتكم؛ كل إعداداتكم تُحفظ على جهازكم فقط.</li>
+        <li>يمكن تثبيته كتطبيق على الهاتف والعمل بدون إنترنت.</li>
+      </ul>
+      <p>رأيكم يهمنا: لأي متطلبات أو اقتراحات أو آراء لتطوير الموقع أكثر، راسلوني على البريد الإلكتروني:</p>
+      <a class="mail" href="mailto:zafora565@gmail.com">zafora565@gmail.com</a>
+      <button class="install-btn" id="aboutInstall">📲 تثبيت التطبيق على الهاتف</button>
+      <div class="duaa">جزاكم الله خيرًا وجعله في ميزان حسناتكم 🤍</div>
+    </div>`;
+    $("aboutInstall").onclick=()=>{
+      if(deferredPrompt){$("installBanner").classList.add("on")}
+      else if(isIOS&&!standalone){$("ibSub").textContent="من Safari: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية»";$("installBanner").classList.add("on");$("ibInstall").style.display="none"}
+      else toast("من قائمة المتصفح ⋮ اختر «تثبيت التطبيق»");
+    };
+  }
+}
+function surahListHTML(list){
+  if(!list.length)return `<div class="empty-note">لا توجد نتائج</div>`;
+  return list.map(s=>`<button class="list-item" data-n="${s.n}">
+    <div class="surah-badge"><span>${toAr(s.n)}</span></div>
+    <div class="info"><h4>سورة ${s.name}</h4><small>${s.meccan?"مكية":"مدنية"} • ${toAr(s.ayahs)} آية</small></div>
+    <span class="go">ص ${toAr(s.page)}</span></button>`).join("");
+}
+function renderAyahPicker(body){
+  const s=state.sbSurah;
+  let chips="";
+  for(let i=1;i<=s.ayahs;i++){chips+=`<button data-a="${i}" class="${i===state.sbAyah?"sel":""}">${toAr(i)}</button>`}
+  body.innerHTML=`
+    <button class="ay-back" id="ayBack">→ عودة إلى السور</button>
+    <div class="ay-title">سورة ${s.name}</div>
+    <div class="ay-meta">${s.meccan?"مكية":"مدنية"} • ${toAr(s.ayahs)} آية</div>
+    <div class="ay-stepper">
+      <button id="ayPrev">› السابقة</button>
+      <b id="ayCur">${toAr(state.sbAyah)}</b>
+      <button id="ayNext">التالية ‹</button>
+    </div>
+    <div class="ay-grid" id="ayGrid">${chips}</div>
+    <button class="ay-go" id="ayGo">انتقال إلى الآية ${toAr(state.sbAyah)}</button>`;
+  $("ayBack").onclick=()=>{state.sbSurah=null;renderTab("index")};
+  const setAy=a=>{
+    state.sbAyah=Math.max(1,Math.min(s.ayahs,a));
+    $("ayCur").textContent=toAr(state.sbAyah);
+    $("ayGo").textContent=`انتقال إلى الآية ${toAr(state.sbAyah)}`;
+    $("ayGrid").querySelectorAll("button").forEach(b=>b.classList.toggle("sel",+b.dataset.a===state.sbAyah));
+    const sel=$("ayGrid").querySelector(".sel");
+    if(sel)sel.scrollIntoView({block:"nearest"});
+  };
+  $("ayPrev").onclick=()=>setAy(state.sbAyah-1);
+  $("ayNext").onclick=()=>setAy(state.sbAyah+1);
+  $("ayGrid").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setAy(+b.dataset.a)});
+  $("ayGo").onclick=async()=>{
+    const g=globalNum(s.n,state.sbAyah);
+    const btn=$("ayGo");btn.textContent="جارٍ الانتقال…";btn.style.opacity=.6;
+    const page=await fetchPageForAyah(g)||s.page;
+    closeSidebar();
+    if(state.view!=="mushaf")setView("mushaf");
+    await goToPage(page,page>state.page?"next":"prev");
+    flashAyah(g);
+  };
+}
+function bindNavItems(body){
+  body.querySelectorAll(".list-item").forEach(it=>{
+    it.onclick=async()=>{
+      it.classList.add("busy");
+      let page=+it.dataset.page;
+      if(it.dataset.kind==="juz")page=await resolveStartPage("juz",+it.dataset.n,page);
+      closeSidebar();
+      if(state.view!=="mushaf")setView("mushaf");
+      goToPage(page,page>state.page?"next":"prev");
+    };
+  });
+}
 
 /* ================= أزرار عامة ================= */
 $("nextBtn").onclick=()=>goToPage(state.page-1,"prev");
@@ -1000,48 +1206,6 @@ $("themeBtn").onclick=()=>{
 function applyFont(){document.documentElement.style.setProperty("--quran-size",state.fontSize+"px");$("fontLabel").textContent=`${toAr(state.fontSize)}px`;localStorage.setItem("mf_font",String(state.fontSize))}
 $("fontPlus").onclick=()=>{state.fontSize=Math.min(46,state.fontSize+2);applyFont()};
 $("fontMinus").onclick=()=>{state.fontSize=Math.max(18,state.fontSize-2);applyFont()};
-
-/* ================= الشريط الجانبي ================= */
-function openSidebar(){renderTab(curTab);$("sidebar").classList.add("on");$("overlay").classList.add("on")}
-function closeSidebar(){$("sidebar").classList.remove("on");$("overlay").classList.remove("on")}
-$("menuBtn").onclick=openSidebar;$("closeSidebar").onclick=closeSidebar;$("overlay").onclick=closeSidebar;
-let curTab="surahs";
-document.querySelectorAll(".sb-tabs button").forEach(b=>{b.onclick=()=>{document.querySelectorAll(".sb-tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");curTab=b.dataset.tab;renderTab(curTab)}});
-function renderTab(tab){
-  const body=$("sbBody");
-  if(tab==="surahs"){
-    body.innerHTML=`<input id="surahSearch" placeholder="🔍 ابحث عن سورة…"><div id="surahResults">${surahListHTML(SURAHS)}</div>`;
-    $("surahSearch").addEventListener("input",e=>{const q=e.target.value.trim();$("surahResults").innerHTML=surahListHTML(SURAHS.filter(s=>s.name.includes(q)||String(s.n)===q))});
-  }else if(tab==="juz"){
-    body.innerHTML=JUZ_PAGES.map((p,i)=>`<button class="list-item" data-kind="juz" data-n="${i+1}" data-page="${p}">
-      <div class="surah-badge"><span>${toAr(i+1)}</span></div>
-      <div class="info"><h4>الجزء ${JUZ_NAMES[i]}</h4><small>يبدأ من الصفحة ${toAr(p)}</small></div>
-      <span class="go">انتقال ←</span></button>`).join("");
-  }else{
-    body.innerHTML=state.bookmarks.length?state.bookmarks.map(p=>{const s=SURAHS.filter(x=>x.page<=p).pop();
-      return `<button class="list-item" data-page="${p}" data-direct="1"><div class="surah-badge"><span>★</span></div>
-      <div class="info"><h4>الصفحة ${toAr(p)}</h4><small>ضمن سورة ${s.name}</small></div><span class="go">انتقال ←</span></button>`}).join("")
-      :`<div class="empty-note">لا توجد علامات محفوظة بعد.<br>اضغط ☆ أسفل الصفحة لإضافة علامة.</div>`;
-  }
-  body.querySelectorAll(".list-item").forEach(it=>{
-    it.onclick=async()=>{
-      it.classList.add("busy");
-      let page=+it.dataset.page;
-      if(it.dataset.kind==="juz")page=await resolveStartPage("juz",+it.dataset.n,page);
-      else if(!it.dataset.direct)page=await resolveStartPage("surah",+it.dataset.n,page);
-      closeSidebar();
-      if(state.view!=="mushaf")setView("mushaf");
-      goToPage(page,page>state.page?"next":"prev");
-    };
-  });
-}
-function surahListHTML(list){
-  if(!list.length)return `<div class="empty-note">لا توجد نتائج</div>`;
-  return list.map(s=>`<button class="list-item" data-kind="surah" data-n="${s.n}" data-page="${s.page}">
-    <div class="surah-badge"><span>${toAr(s.n)}</span></div>
-    <div class="info"><h4>سورة ${s.name}</h4><small>${s.meccan?"مكية":"مدنية"} • ${toAr(s.ayahs)} آية</small></div>
-    <span class="go">ص ${toAr(s.page)}</span></button>`).join("");
-}
 function updateBookmarkBtn(){
   const on=state.bookmarks.includes(state.page),b=$("bookmarkBtn");
   b.classList.toggle("active",on);
@@ -1054,6 +1218,40 @@ $("bookmarkBtn").onclick=()=>{
   localStorage.setItem("mf_marks",JSON.stringify(state.bookmarks));updateBookmarkBtn();
 };
 
+/* ================= تثبيت التطبيق (PWA) ================= */
+let deferredPrompt=null;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();deferredPrompt=e;
+  setTimeout(()=>$("installBanner").classList.add("on"),1600);
+});
+window.addEventListener("appinstalled",()=>{
+  $("installBanner").classList.remove("on");
+  toast("🎉 تم تثبيت تطبيق المصحف على هاتفك");
+});
+$("ibInstall").onclick=async()=>{
+  if(!deferredPrompt){
+    if(isIOS&&!standalone){$("ibSub").textContent="من Safari: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية»";return}
+    toast("من قائمة المتصفح ⋮ اختر «تثبيت التطبيق»");return;
+  }
+  deferredPrompt.prompt();
+  const c=await deferredPrompt.userChoice;
+  if(c.outcome==="accepted")$("installBanner").classList.remove("on");
+  deferredPrompt=null;
+};
+$("ibLater").onclick=()=>$("installBanner").classList.remove("on");
+if(isIOS&&!standalone){
+  setTimeout(()=>{
+    $("ibSub").textContent="من Safari: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية»";
+    $("ibInstall").style.display="none";
+    $("installBanner").classList.add("on");
+  },2500);
+}
+if("serviceWorker" in navigator){
+  addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+
 /* ================= الإقلاع ================= */
 (function boot(){
   const th=localStorage.getItem("mf_theme")||"light";
@@ -1064,10 +1262,46 @@ $("bookmarkBtn").onclick=()=>{
   state.page=Math.max(1,Math.min(TOTAL_PAGES,parseInt(localStorage.getItem("mf_last")||"1")||1));
   $("jumpInput").max=TOTAL_PAGES;
   buildTasbihUI();
-  goToPage(state.page,null,true).then(()=>{
-    if(state.page>1)toast(`عاد بك إلى الصفحة ${toAr(state.page)} — آخر ما قرأته`);
-  });
+  goToPage(state.page,null,true).then(()=>{hideSplash()}).catch(()=>{hideSplash()});
+  setTimeout(hideSplash,6000); /* أمان: لا تبقى الشاشة معلّقة */
 })();
 </script>
 </body>
 </html>
+
+
+              <script>
+                              /* ====== sw.js (يجعل التطبيق يعمل بدون إنترنت ويخزّن المصحف والتلاوة) ====== */
+const CACHE = "mushaf-v1";
+const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
+
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)));
+  self.skipWaiting();
+});
+self.addEventListener("activate", e => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener("fetch", e => {
+  if (e.request.method !== "GET") return;
+  const url = new URL(e.request.url);
+  const isApi = /alquran\.cloud|islamic\.network|quran\.com|jsdelivr|fontsource/.test(url.host);
+  if (isApi) {
+    e.respondWith(caches.open(CACHE).then(async c => {
+      const hit = await c.match(e.request);
+      const net = fetch(e.request).then(r => { if (r.ok) c.put(e.request, r.clone()); return r; }).catch(() => hit);
+      return hit || net;
+    }));
+  } else {
+    e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(r => {
+      const cp = r.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return r;
+    })));
+  }
+});
+
+
+              </script>
+                        </body>
+                        </html>
+                    
