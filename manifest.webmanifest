@@ -1,0 +1,17 @@
+{
+  "name": "المصحف الشريف",
+  "short_name": "المصحف",
+  "description": "القرآن الكريم كاملًا مع التفسير والتلاوة والمسبحة الإلكترونية",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1310",
+  "theme_color": "#0b1310",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
