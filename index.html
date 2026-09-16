@@ -1,19 +1,4 @@
-
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                body {
-                  background-color: white; /* Ensure the iframe has a white background */
-                }
-
-                
-              </style>
-                        </head>
-                        <body>
-                            <!-- ====== index.html ====== -->
+<!-- ====== index.html (نسخة مصححة: الفهرس والبحث يعملان بالكامل) ====== -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -307,7 +292,6 @@ html[data-theme="dark"] .tafsir-sec h4{color:var(--gold)}
 .t-targets input{width:92px;padding:.5rem .6rem;border-radius:11px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;text-align:center;font-size:.85rem;transition:border-color .2s,box-shadow .2s}
 .t-targets input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
 
-/* المدار — خفيف وسلس: بدون فلاتر SVG ثقيلة، والعد بالنقر فقط */
 .orbit-wrap{
   position:relative;width:min(340px,86vw);margin:1.6rem auto .5rem;
   cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:pan-y;
@@ -606,6 +590,7 @@ function hideSplash(){
   const wait=Math.max(0,1000-(performance.now()-BOOT_T0));
   setTimeout(()=>{
     const sp=$("splash");
+    if(!sp||sp.classList.contains("hide"))return;
     sp.classList.add("hide");
     setTimeout(()=>sp.remove(),700);
   },wait);
@@ -884,10 +869,10 @@ function refreshPlayButtons(){
   const pb=$("playPageBtn");
   pb.textContent=playing?(state.audioMode.startsWith("repeat")?"🔁 إيقاف التكرار":"⏹ إيقاف الاستماع"):"▶ استماع للصفحة";
   pb.classList.toggle("playing",playing);
-  $("abPlay").textContent=playing?"⏹ إيقاف":" استماع";
+  $("abPlay").textContent=playing?"⏹ إيقاف":"🎧 استماع";
   document.querySelectorAll("[data-act=play]").forEach(b=>{
     const g=+b.dataset.g;
-    b.textContent=(playing&&g===cur)?"⏹ إيقاف":" استماع";
+    b.textContent=(playing&&g===cur)?"⏹ إيقاف":"🎧 استماع";
   });
 }
 function startQueue(globals,idx,mode){state.audioQueue=globals;state.audioIdx=idx;state.audioMode=mode;playCurrent()}
@@ -1025,7 +1010,6 @@ function syncTasbih(){
 function tasbihIncrement(){
   tasbih.count++;tasbih.total++;
   syncTasbih();saveTasbih();
-  /* حركات خفيفة عبر WAAPI بدون إعادة تدفق الصفحة */
   $("orbitWrap").animate([{transform:"scale(1)"},{transform:"scale(1.028)",offset:.3},{transform:"scale(1)"}],{duration:380,easing:"ease-out"});
   $("ripple").animate([{opacity:.7,transform:"scale(.6)"},{opacity:0,transform:"scale(1.28)"}],{duration:650,easing:"ease-out"});
   if(navigator.vibrate)navigator.vibrate(12);
@@ -1034,7 +1018,6 @@ function tasbihIncrement(){
     if(navigator.vibrate)navigator.vibrate([60,80,60]);
   }
 }
-/* العد بالنقر المباشر فقط: حركة التمرير لا تُحتسب */
 (function tapGuard(){
   const ow=$("orbitWrap");
   let px=0,py=0,moved=0,down=false;
@@ -1045,7 +1028,7 @@ function tasbihIncrement(){
   });
   ow.addEventListener("pointerup",()=>{down=false});
   ow.addEventListener("click",e=>{
-    if(moved>12)return;      /* سحب/تقليب → لا يُحتسب */
+    if(moved>12)return;
     tasbihIncrement();
   });
 })();
@@ -1072,7 +1055,7 @@ function setView(v){
 }
 document.querySelectorAll("#viewSeg button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
 
-/* ================= الشريط الجانبي: الفهرس + الأجزاء + علاماتي + النبذة ================= */
+/* ================= الشريط الجانبي ================= */
 function openSidebar(){renderTab(curTab);$("sidebar").classList.add("on");$("overlay").classList.add("on")}
 function closeSidebar(){$("sidebar").classList.remove("on");$("overlay").classList.remove("on")}
 $("menuBtn").onclick=openSidebar;$("closeSidebar").onclick=closeSidebar;$("overlay").onclick=closeSidebar;
@@ -1083,10 +1066,11 @@ function renderTab(tab){
   const body=$("sbBody");
   if(tab==="index"){
     if(!state.sbSurah){
-      body.innerHTML=`<input id="surahSearch" placeholder="🔍 ابحث عن سورة…"><div id="surahResults">${surahListHTML(SURAHS)}</div>`;
-      $("surahSearch").addEventListener("input",e=>{const q=e.target.value.trim();$("surahResults").innerHTML=surahListHTML(SURAHS.filter(s=>s.name.includes(q)||String(s.n)===q))});
-      body.querySelectorAll(".list-item").forEach(it=>{
-        it.onclick=()=>{state.sbSurah=SURAHS[+it.dataset.n-1];state.sbAyah=1;renderTab("index")};
+      body.innerHTML=`<input id="surahSearch" placeholder="🔍 ابحث عن سورة…" value="${esc(sbSearchQ)}"><div id="surahResults">${surahListHTML(filterSurahs(sbSearchQ))}</div>`;
+      $("surahSearch").addEventListener("input",e=>{
+        sbSearchQ=e.target.value.trim();
+        $("surahResults").innerHTML=surahListHTML(filterSurahs(sbSearchQ));
+        /* لا حاجة لإعادة الربط: التفويض في #sbBody يتكفل بالنقرات */
       });
     }else{
       renderAyahPicker(body);
@@ -1096,13 +1080,11 @@ function renderTab(tab){
       <div class="surah-badge"><span>${toAr(i+1)}</span></div>
       <div class="info"><h4>الجزء ${JUZ_NAMES[i]}</h4><small>يبدأ من الصفحة ${toAr(p)}</small></div>
       <span class="go">انتقال ←</span></button>`).join("");
-    bindNavItems(body);
   }else if(tab==="marks"){
     body.innerHTML=state.bookmarks.length?state.bookmarks.map(p=>{const s=SURAHS.filter(x=>x.page<=p).pop();
       return `<button class="list-item" data-page="${p}" data-direct="1"><div class="surah-badge"><span>★</span></div>
       <div class="info"><h4>الصفحة ${toAr(p)}</h4><small>ضمن سورة ${s.name}</small></div><span class="go">انتقال ←</span></button>`}).join("")
       :`<div class="empty-note">لا توجد علامات محفوظة بعد.<br>اضغط ☆ أسفل الصفحة لإضافة علامة.</div>`;
-    bindNavItems(body);
   }else if(tab==="about"){
     body.innerHTML=`<div class="about">
       <h3>✨ نبذة عن التطبيق</h3>
@@ -1121,18 +1103,38 @@ function renderTab(tab){
     </div>`;
     $("aboutInstall").onclick=()=>{
       if(deferredPrompt){$("installBanner").classList.add("on")}
-      else if(isIOS&&!standalone){$("ibSub").textContent="من Safari: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية»";$("installBanner").classList.add("on");$("ibInstall").style.display="none"}
+      else if(isIOS&&!standalone){$("ibSub").textContent="من Safari: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية»";$("ibInstall").style.display="none";$("installBanner").classList.add("on")}
       else toast("من قائمة المتصفح ⋮ اختر «تثبيت التطبيق»");
     };
   }
 }
+let sbSearchQ="";
+function filterSurahs(q){return q?SURAHS.filter(s=>s.name.includes(q)||String(s.n)===q):SURAHS}
 function surahListHTML(list){
   if(!list.length)return `<div class="empty-note">لا توجد نتائج</div>`;
-  return list.map(s=>`<button class="list-item" data-n="${s.n}">
+  return list.map(s=>`<button class="list-item" data-kind="surah" data-n="${s.n}">
     <div class="surah-badge"><span>${toAr(s.n)}</span></div>
     <div class="info"><h4>سورة ${s.name}</h4><small>${s.meccan?"مكية":"مدنية"} • ${toAr(s.ayahs)} آية</small></div>
     <span class="go">ص ${toAr(s.page)}</span></button>`).join("");
 }
+/* ★ مستمعclick واحد مفوَّض: يعمل مع كل القوائم مهما أُعيد رسمها (بحث، فهرس، أجزاء، علامات) */
+$("sbBody").addEventListener("click",async e=>{
+  const item=e.target.closest(".list-item");
+  if(!item)return;
+  if(item.dataset.kind==="surah"){
+    state.sbSurah=SURAHS[+item.dataset.n-1];
+    state.sbAyah=1;
+    renderTab("index");
+    return;
+  }
+  /* أجزاء / علامات */
+  item.classList.add("busy");
+  let page=+item.dataset.page;
+  if(item.dataset.kind==="juz")page=await resolveStartPage("juz",+item.dataset.n,page);
+  closeSidebar();
+  if(state.view!=="mushaf")setView("mushaf");
+  goToPage(page,page>state.page?"next":"prev");
+});
 function renderAyahPicker(body){
   const s=state.sbSurah;
   let chips="";
@@ -1169,18 +1171,6 @@ function renderAyahPicker(body){
     await goToPage(page,page>state.page?"next":"prev");
     flashAyah(g);
   };
-}
-function bindNavItems(body){
-  body.querySelectorAll(".list-item").forEach(it=>{
-    it.onclick=async()=>{
-      it.classList.add("busy");
-      let page=+it.dataset.page;
-      if(it.dataset.kind==="juz")page=await resolveStartPage("juz",+it.dataset.n,page);
-      closeSidebar();
-      if(state.view!=="mushaf")setView("mushaf");
-      goToPage(page,page>state.page?"next":"prev");
-    };
-  });
 }
 
 /* ================= أزرار عامة ================= */
@@ -1263,45 +1253,8 @@ if("serviceWorker" in navigator){
   $("jumpInput").max=TOTAL_PAGES;
   buildTasbihUI();
   goToPage(state.page,null,true).then(()=>{hideSplash()}).catch(()=>{hideSplash()});
-  setTimeout(hideSplash,6000); /* أمان: لا تبقى الشاشة معلّقة */
+  setTimeout(hideSplash,6000);
 })();
 </script>
 </body>
 </html>
-
-
-              <script>
-                              /* ====== sw.js (يجعل التطبيق يعمل بدون إنترنت ويخزّن المصحف والتلاوة) ====== */
-const CACHE = "mushaf-v1";
-const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
-
-self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)));
-  self.skipWaiting();
-});
-self.addEventListener("activate", e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
-  self.clients.claim();
-});
-self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
-  const url = new URL(e.request.url);
-  const isApi = /alquran\.cloud|islamic\.network|quran\.com|jsdelivr|fontsource/.test(url.host);
-  if (isApi) {
-    e.respondWith(caches.open(CACHE).then(async c => {
-      const hit = await c.match(e.request);
-      const net = fetch(e.request).then(r => { if (r.ok) c.put(e.request, r.clone()); return r; }).catch(() => hit);
-      return hit || net;
-    }));
-  } else {
-    e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(r => {
-      const cp = r.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return r;
-    })));
-  }
-});
-
-
-              </script>
-                        </body>
-                        </html>
-                    
