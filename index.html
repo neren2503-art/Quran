@@ -67,7 +67,7 @@ select{font-family:inherit}
 ::selection{background:var(--gold-soft)}
 
 /* ===== ألوان التجويد ===== */
-.ham_wasl,.slnt,.lam_shamsiyah{color:#AAAAAA}
+.ham_wasl,.slnt,.lam_shamsiyah{color:#767676}
 .madda_normal{color:#537FFF}
 .madda_permissible{color:#4050FF}
 .madda_necessary{color:#000EBC}
@@ -79,10 +79,13 @@ select{font-family:inherit}
 .iqlab{color:#26BFFD}
 .idgham_ghunnah,.idghaam_ghunnah{color:#169777}
 .idgham_wo_ghunnah,.idghaam_without_ghunnah{color:#169200}
-.idgham_mutajanisayn,.idghaam_mutajanisayn,.idgham_mutaqaribayn,.idghaam_mutaqaribayn{color:#A1A1A1}
+.idgham_mutajanisayn,.idghaam_mutajanisayn,.idgham_mutaqaribayn,.idghaam_mutaqaribayn{color:#767676}
 .ghunnah{color:#FF7E1E}
 html[data-theme="dark"] .madda_necessary{color:#4d6bff}
 html[data-theme="dark"] .madda_obligatory{color:#5f7dff}
+  html[data-theme="dark"] .ham_wasl,html[data-theme="dark"] .slnt,html[data-theme="dark"] .lam_shamsiyah,
+html[data-theme="dark"] .idgham_mutajanisayn,html[data-theme="dark"] .idghaam_mutajanisayn,
+html[data-theme="dark"] .idgham_mutaqaribayn,html[data-theme="dark"] .idghaam_mutaqaribayn{color:#c9d4de}
 html[data-theme="light"] .ghunnah{color:#e06a00}
 html[data-theme="light"] .ikhafa{color:#7a008c}
 html[data-theme="light"] .qalaqalah{color:#c00007}
@@ -139,7 +142,7 @@ header{position:sticky;top:0;z-index:90;background:var(--bar);backdrop-filter:bl
 .sb-tabs{display:flex;gap:.3rem;padding:0 1.1rem .8rem;border-bottom:1px solid var(--line)}
 .sb-tabs button{flex:1;padding:.55rem .2rem;border-radius:10px 10px 0 0;font-size:.8rem;font-weight:700;color:var(--ink-soft);border-bottom:2.5px solid transparent;transition:all .25s}
 .sb-tabs button.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--green-soft)}
-.sb-body{flex:1;overflow-y:auto;padding:.8rem 1.1rem 2rem;scrollbar-width:thin}
+.sb-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:.8rem 1.1rem 2rem;scrollbar-width:thin}
 .sb-body::-webkit-scrollbar{width:5px}.sb-body::-webkit-scrollbar-thumb{background:var(--gold-soft);border-radius:5px}
 #surahSearch{width:100%;padding:.65rem .95rem;border-radius:13px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.9rem;margin-bottom:.7rem;transition:border-color .2s, box-shadow .2s}
 #surahSearch:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
@@ -165,7 +168,7 @@ header{position:sticky;top:0;z-index:90;background:var(--bar);backdrop-filter:bl
 .ay-stepper button{padding:.55rem .9rem;border-radius:11px;border:1px solid var(--line);background:var(--card2);font-size:.8rem;font-weight:700;transition:all .2s}
 .ay-stepper button:hover{border-color:var(--gold);color:var(--gold)}
 .ay-stepper b{font-family:'Amiri',serif;font-size:1.6rem;color:var(--gold);min-width:60px;text-align:center}
-.ay-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:.35rem;max-height:38vh;overflow-y:auto;padding:.2rem;scrollbar-width:thin}
+.ay-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:.35rem;max-height:38vh;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:.2rem;scrollbar-width:thin}
 .ay-grid::-webkit-scrollbar{width:4px}.ay-grid::-webkit-scrollbar-thumb{background:var(--gold-soft);border-radius:4px}
 .ay-grid button{padding:.5rem 0;border-radius:10px;border:1px solid var(--line);background:var(--card2);font-size:.8rem;font-weight:700;color:var(--ink-soft);transition:all .18s}
 .ay-grid button:hover{border-color:var(--gold-soft);color:var(--gold)}
@@ -323,7 +326,7 @@ html[data-theme="dark"] .surah-banner .banner-inner{color:var(--gold)}
 .sheet.mini{max-height:78dvh}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:1rem 1.2rem .8rem;border-bottom:1px solid var(--line)}
 .sheet-head h3{font-family:'Reem Kufi',sans-serif;font-size:1.05rem;color:var(--gold);display:flex;align-items:center;gap:.5rem}
-.sheet-body{overflow-y:auto;padding:1.1rem 1.3rem 2rem;scrollbar-width:thin}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:1.1rem 1.3rem 2rem;scrollbar-width:thin}
 .sheet-body::-webkit-scrollbar{width:5px}.sheet-body::-webkit-scrollbar-thumb{background:var(--gold-soft);border-radius:5px}
 .pm-settings{display:flex;gap:.6rem;padding:1rem 1.1rem 0;flex-wrap:wrap}
 .pm-settings label{flex:1;min-width:150px;font-size:.75rem;font-weight:700;color:var(--ink-soft);display:flex;flex-direction:column;gap:.35rem}
@@ -488,7 +491,8 @@ html[data-theme="dark"] .orbit-center small{color:var(--gold)}
       <div class="brand-icon">۩</div>
       <div><h1>المصحف الشريف</h1><small>قرآن • تلاوة • تفسير • أذكار • مسبحة</small></div>
     </div>
-    <div class="top-actions">
+        <div class="top-actions">
+      <button class="icon-btn" id="rotateBtn" aria-label="تدوير الشاشة">🔄</button>
       <button class="icon-btn" id="themeBtn" aria-label="تبديل الوضع">🌙</button>
     </div>
   </div>
@@ -654,7 +658,7 @@ html[data-theme="dark"] .orbit-center small{color:var(--gold)}
     <div class="set-sec">
       <h4>🎨 دليل ألوان التجويد</h4>
       <div class="tw-legend">
-        <div class="tw-item"><span class="tw-dot" style="background:#AAAAAA"></span>همزة الوصل والساكن واللام الشمسية</div>
+        <div class="tw-item"><span class="tw-dot" style="background:#8b98a5"></span>همزة الوصل والساكن واللام الشمسية</div>
         <div class="tw-item"><span class="tw-dot" style="background:#537FFF"></span>مد طبيعي (حركتان)</div>
         <div class="tw-item"><span class="tw-dot" style="background:#4050FF"></span>مد جائز (٢/٤/)</div>
         <div class="tw-item"><span class="tw-dot" style="background:#2144C1"></span>مد لازم (٤–٥ حركات)</div>
@@ -667,7 +671,7 @@ html[data-theme="dark"] .orbit-center small{color:var(--gold)}
         <div class="tw-item"><span class="tw-dot" style="background:#169777"></span>الإدغام بغنة</div>
         <div class="tw-item"><span class="tw-dot" style="background:#169200"></span>الإدغام بغير غنة</div>
         <div class="tw-item"><span class="tw-dot" style="background:#FF7E1E"></span>الغنة</div>
-        <div class="tw-item"><span class="tw-dot" style="background:#A1A1A1"></span>إدغام المتجانسين والمتقاربين</div>
+        <div class="tw-item"><span class="tw-dot" style="background:#8b98a5"></span>إدغام المتجانسين والمتقاربين</div>
       </div>
       <p class="set-note">تظهر الألوان داخل صفحات المصحف عند اختيار «مصحف التجويد»، وتتواءم مع الوضعين الفاتح والليلي.</p>
     </div>
@@ -1304,12 +1308,12 @@ async function openTafsir(g){
   const ay=state.data&&state.data.ar.ayahs.find(a=>a.number===g);
   if(!ay)return;
   $("tafsirTitle").textContent=`تفسير سورة ${ay.surah.name.replace("سورة ","")} — الآية ${toAr(ay.numberInSurah)}`;
-  $("tafsirBody").innerHTML=`<div class="tafsir-verse">${esc(cleanText(ay.text))} <span class="ayah-marker">${toAr(ay.numberInSurah)}</span></div>
+  $("tafsirBody").innerHTML=`<div class="tafsir-verse">${esc(plainOf(ay.text))} <span class="ayah-marker">${toAr(ay.numberInSurah)}</span></div>
   <div class="state-box"><div class="spinner sm"></div><p>جارٍ جلب التفسير…</p></div>`;
   $("tafsirOverlay").classList.add("on");$("tafsirSheet").classList.add("on");pushLayer();
   try{
     const t=await fetchTafsir(g);
-    $("tafsirBody").innerHTML=`<div class="tafsir-verse">${esc(cleanText(ay.text))} <span class="ayah-marker">${toAr(ay.numberInSurah)}</span></div>
+    $("tafsirBody").innerHTML=`<div class="tafsir-verse">${esc(plainOf(ay.text))} <span class="ayah-marker">${toAr(ay.numberInSurah)}</span></div>
       ${t.muyassar?`<div class="tafsir-sec"><h4>التفسير الميسّر</h4><p>${esc(t.muyassar)}</p></div>`:""}
       ${t.jalalayn?`<div class="tafsir-sec"><h4>تفسير الجلالين</h4><p>${esc(t.jalalayn)}</p></div>`:""}
       <div style="text-align:center;color:var(--ink-soft);font-size:.72rem;margin-top:1rem">— المصدر: تفسير الميسّر وتفسير الجلالين —</div>`;
@@ -1620,6 +1624,28 @@ $("themeBtn").onclick=()=>{
   document.documentElement.dataset.theme=n;
   $("themeBtn").textContent=n==="dark"?"\u{1F319}":"\u2600\uFE0F";
   localStorage.setItem("mf_theme",n);
+};
+  /* زر تدوير الشاشة: عمودي ↔ أفقي */
+$("rotateBtn").onclick=async()=>{
+  const cur=(screen.orientation&&screen.orientation.type)||"";
+  const toLandscape=!cur.startsWith("landscape");
+  const target=toLandscape?"landscape":"portrait";
+  const okMsg=toLandscape?"🖥 تم التدوير إلى الوضع الأفقي":"📱 تم التدوير إلى الوضع العمودي";
+  try{
+    if(!screen.orientation||!screen.orientation.lock)throw 0;
+    await screen.orientation.lock(target);
+    toast(okMsg);
+  }catch(e){
+    try{
+      if(!document.fullscreenElement&&document.documentElement.requestFullscreen){
+        await document.documentElement.requestFullscreen();
+      }
+      await screen.orientation.lock(target);
+      toast(okMsg);
+    }catch(e2){
+      toast("جهازك لا يسمح بقفل الاتجاه من داخل التطبيق — استخدم تدوير النظام");
+    }
+  }
 };
 function applyFont(){document.documentElement.style.setProperty("--quran-size",state.fontSize+"px");$("fontLabel").textContent=`${toAr(state.fontSize)}px`;localStorage.setItem("mf_font",String(state.fontSize))}
 $("fontPlus").onclick=()=>{state.fontSize=Math.min(46,state.fontSize+2);applyFont()};
