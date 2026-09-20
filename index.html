@@ -1104,10 +1104,8 @@ pageContent.addEventListener("click",e=>{
 $("abClose").onclick=()=>{$("ayahBar").classList.remove("on");clearSelection()};
 $("abPlay").onclick=()=>{
   if(!state.selected)return;
-  if(isPlaying()){stopAudio();return}
-  if(playArmed){playArmed=false;refreshPlayButtons();return}
-  playArmed=true;refreshPlayButtons();
-  openPlayMenu({type:"ayah",g:state.selected.g});
+  if(isPlaying())stopAudio();
+  else openPlayMenu({type:"ayah",g:state.selected.g});
 };
 $("abTafsir").onclick=()=>{if(state.selected)openTafsir(state.selected.g)};
 $("abCopy").onclick=()=>{if(state.selected)copyText(state.selected.text)};
@@ -1116,7 +1114,6 @@ function copyText(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promi
 
 /* ========== الاستماع مع تجربة الجودات تلقائيًا ========== */
 let playCtx=null;
-  let playArmed=false;
 function buildAudioSelects(){
   const rs=$("reciterSel");
   rs.innerHTML=RECITERS.map(r=>`<option value="${r.id}" ${r.id===state.reciter?"selected":""}>${r.name}</option>`).join("");
@@ -1164,12 +1161,15 @@ function continuousQueueFrom(ayahs,startIdx){
   return {globals:ayahs.slice(startIdx,endIdx+1).map(a=>a.number),ends,name};
 }
 const isPlaying=()=>!!state.audioMode&&!audioEl.paused;
+  /* الزر يتحول إلى "إيقاف" لحظة بدء الصوت فعليًا، ويعود "استماع" لحظة توقفه */
+audioEl.addEventListener("play",()=>refreshPlayButtons());
+audioEl.addEventListener("pause",()=>refreshPlayButtons());
 function refreshPlayButtons(){
   const playing=isPlaying(),cur=playing?state.audioQueue[state.audioIdx]:null;
   const pb=$("playPageBtn");
   pb.textContent=playing?(state.audioMode.startsWith("repeat")?"🔁 إيقاف التكرار":"⏹ إيقاف الاستماع"):"▶ استماع للصفحة";
   pb.classList.toggle("playing",playing);
-  $("abPlay").textContent=(playing||playArmed)?"⏹ إيقاف":"🎧 استماع";
+  $("abPlay").textContent=playing?"⏹ إيقاف":" استماع";
   document.querySelectorAll("[data-act=play]").forEach(b=>{
     const g=+b.dataset.g;
     b.textContent=(playing&&g===cur)?"⏹ إيقاف":"🎧 استماع";
@@ -1223,7 +1223,6 @@ function stopAudio(){
   document.querySelectorAll(".playing").forEach(el=>el.classList.remove("playing"));
   state.audioQueue=[];state.audioIdx=-1;state.audioMode=null;state.audioPending=false;
   state.audioEndsSurah=false;state.audioSurahName="";
-  playArmed=false;
   refreshPlayButtons();
 }
 $("playPageBtn").onclick=()=>{if(isPlaying())stopAudio();else if(state.data)openPlayMenu({type:"page"})};
