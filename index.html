@@ -492,7 +492,6 @@ html[data-theme="dark"] .orbit-center small{color:var(--gold)}
       <div><h1>المصحف الشريف</h1><small>قرآن • تلاوة • تفسير • أذكار • مسبحة</small></div>
     </div>
         <div class="top-actions">
-      <button class="icon-btn" id="rotateBtn" aria-label="تدوير الشاشة">🔄</button>
       <button class="icon-btn" id="themeBtn" aria-label="تبديل الوضع">🌙</button>
     </div>
   </div>
@@ -1624,28 +1623,6 @@ $("themeBtn").onclick=()=>{
   document.documentElement.dataset.theme=n;
   $("themeBtn").textContent=n==="dark"?"\u{1F319}":"\u2600\uFE0F";
   localStorage.setItem("mf_theme",n);
-};
-  /* زر تدوير الشاشة: عمودي ↔ أفقي */
-$("rotateBtn").onclick=async()=>{
-  const cur=(screen.orientation&&screen.orientation.type)||"";
-  const toLandscape=!cur.startsWith("landscape");
-  const target=toLandscape?"landscape":"portrait";
-  const okMsg=toLandscape?"🖥 تم التدوير إلى الوضع الأفقي":"📱 تم التدوير إلى الوضع العمودي";
-  try{
-    if(!screen.orientation||!screen.orientation.lock)throw 0;
-    await screen.orientation.lock(target);
-    toast(okMsg);
-  }catch(e){
-    try{
-      if(!document.fullscreenElement&&document.documentElement.requestFullscreen){
-        await document.documentElement.requestFullscreen();
-      }
-      await screen.orientation.lock(target);
-      toast(okMsg);
-    }catch(e2){
-      toast("جهازك لا يسمح بقفل الاتجاه من داخل التطبيق — استخدم تدوير النظام");
-    }
-  }
 };
 function applyFont(){document.documentElement.style.setProperty("--quran-size",state.fontSize+"px");$("fontLabel").textContent=`${toAr(state.fontSize)}px`;localStorage.setItem("mf_font",String(state.fontSize))}
 $("fontPlus").onclick=()=>{state.fontSize=Math.min(46,state.fontSize+2);applyFont()};
