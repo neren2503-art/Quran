@@ -1097,7 +1097,9 @@ pageContent.addEventListener("click",e=>{
     ay.classList.add("selected");
     state.selected={g:+ay.dataset.g,text:decodeURIComponent(ay.dataset.text),label:`${surahOf(+ay.dataset.s).name} : ${toAr(ay.dataset.a)}`};
     $("ayahBarLbl").textContent=state.selected.label;
+    const wasBarOn=$("ayahBar").classList.contains("on");
     $("ayahBar").classList.add("on");
+    if(!wasBarOn)pushLayer();
     refreshPlayButtons();
   }
 });
@@ -1131,7 +1133,7 @@ function openPlayMenu(ctx){
   $("playMenuTitle").textContent=ctx.type==="page"?"🎧 الاستماع للصفحة كاملة":"🎧 خيارات الاستماع للآية";
   $("pmRepeat").querySelector("b").textContent=ctx.type==="page"?"تكرار الصفحة":"تكرار الآية";
   $("pmRepeat").querySelector("small").textContent=ctx.type==="page"?"تُعاد الصفحة كاملة بشكل متواصل حتى الإيقاف":"تُعاد الآية المختارة بشكل متواصل حتى الإيقاف";
-  $("playMenuOverlay").classList.add("on");$("playMenuSheet").classList.add("on");
+  $("playMenuOverlay").classList.add("on");$("playMenuSheet").classList.add("on");pushLayer();
 }
 function closePlayMenu(){$("playMenuOverlay").classList.remove("on");$("playMenuSheet").classList.remove("on")}
 $("playMenuClose").onclick=closePlayMenu;$("playMenuOverlay").onclick=closePlayMenu;
@@ -1257,7 +1259,7 @@ async function openTafsir(g){
   $("tafsirTitle").textContent=`تفسير سورة ${ay.surah.name.replace("سورة ","")} — الآية ${toAr(ay.numberInSurah)}`;
   $("tafsirBody").innerHTML=`<div class="tafsir-verse">${esc(cleanText(ay.text))} <span class="ayah-marker">${toAr(ay.numberInSurah)}</span></div>
   <div class="state-box"><div class="spinner sm"></div><p>جارٍ جلب التفسير…</p></div>`;
-  $("tafsirOverlay").classList.add("on");$("tafsirSheet").classList.add("on");
+  $("tafsirOverlay").classList.add("on");$("tafsirSheet").classList.add("on");pushLayer();
   try{
     const t=await fetchTafsir(g);
     $("tafsirBody").innerHTML=`<div class="tafsir-verse">${esc(cleanText(ay.text))} <span class="ayah-marker">${toAr(ay.numberInSurah)}</span></div>
@@ -1274,7 +1276,7 @@ function closeTafsir(){$("tafsirOverlay").classList.remove("on");$("tafsirSheet"
 $("tafsirClose").onclick=closeTafsir;$("tafsirOverlay").onclick=closeTafsir;
 
 /* ========== الإعدادات: نوع المصحف ========== */
-function openSettings(){syncSettingsUI();$("settingsOverlay").classList.add("on");$("settingsSheet").classList.add("on")}
+function openSettings(){syncSettingsUI();$("settingsOverlay").classList.add("on");$("settingsSheet").classList.add("on");pushLayer()}
 function closeSettings(){$("settingsOverlay").classList.remove("on");$("settingsSheet").classList.remove("on")}
 function syncSettingsUI(){
   document.querySelectorAll(".set-opt").forEach(b=>b.classList.toggle("active",b.dataset.mt===state.mushafType));
@@ -1307,7 +1309,7 @@ function renderAdhkar(){
           <b>${c.name}</b>
           <small>${toAr(c.items.length)} أذكار</small>
         </button>`).join("")}</div>`;
-    body.querySelectorAll(".adh-cat").forEach(b=>b.onclick=()=>{adhCat=b.dataset.c;renderAdhkar()});
+    body.querySelectorAll(".adh-cat").forEach(b=>b.onclick=()=>{adhCat=b.dataset.c;renderAdhkar();pushLayer()});
     return;
   }
   const cat=ADHKAR.find(c=>c.id===adhCat);
@@ -1411,10 +1413,12 @@ function setView(v){
   if(!mushaf)stopAudio();
   window.scrollTo({top:0});
 }
-document.querySelectorAll("#viewSeg button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+function setViewPush(v){if(v!=="mushaf"&&state.view==="mushaf")pushLayer();setView(v)
+                       }
+document.querySelectorAll("#viewSeg button").forEach(b=>b.onclick=()=>setViewPush(b.dataset.view));
 
 /* ========== الشريط الجانبي ========== */
-function openSidebar(){renderTab(curTab);$("sidebar").classList.add("on");$("overlay").classList.add("on")}
+function openSidebar(){renderTab(curTab);$("sidebar").classList.add("on");$("overlay").classList.add("on");pushLayer()}
 function closeSidebar(){$("sidebar").classList.remove("on");$("overlay").classList.remove("on")}
 $("menuBtn").onclick=openSidebar;$("closeSidebar").onclick=closeSidebar;$("overlay").onclick=closeSidebar;
 let curTab="index",sbSearchQ="";
@@ -1470,7 +1474,7 @@ function renderTab(tab){
 $("sbBody").addEventListener("click",async e=>{
   const item=e.target.closest(".list-item");
   if(!item)return;
-  if(item.dataset.kind==="surah"){state.sbSurah=SURAHS[+item.dataset.n-1];state.sbAyah=1;renderTab("index");return}
+  if(item.dataset.kind==="surah"){state.sbSurah=SURAHS[+item.dataset.n-1];state.sbAyah=1;renderTab("index");pushLayer();return}
   item.classList.add("busy");
   let page=+item.dataset.page;
   if(item.dataset.kind==="juz")page=await resolveStartPage("juz",+item.dataset.n,page);
@@ -1524,7 +1528,12 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowLeft"&&state.view==="mushaf")goToPage(state.page+1,"next");
   if(e.key==="ArrowRight"&&state.view==="mushaf")goToPage(state.page-1,"prev");
 });
-$("pageIndicator").onclick=e=>{if(e.target.closest(".jump-pop"))return;$("jumpPop").classList.toggle("on");$("jumpInput").value=state.page};
+$("pageIndicator").onclick=e=>{
+  if(e.target.closest(".jump-pop"))return;
+  const jp=$("jumpPop"),opening=!jp.classList.contains("on");
+  jp.classList.toggle("on");$("jumpInput").value=state.page;
+  if(opening)pushLayer();
+};
 $("jumpGo").onclick=doJump;
 $("jumpInput").addEventListener("keydown",e=>{if(e.key==="Enter")doJump()});
 function doJump(){const v=parseInt($("jumpInput").value);if(v>=1&&v<=TOTAL_PAGES){$("jumpPop").classList.remove("on");goToPage(v,v>state.page?"next":"prev")}else toast("رقم الصفحة بين ١ و ٦٠٤")}
@@ -1571,8 +1580,37 @@ if(isIOS&&!standalone){
 }
 if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
 
+/* ========== زر الرجوع (الخلف): تنقل منظم داخل التطبيق ========== */
+function pushLayer(){try{history.pushState({mf:1},"")}catch(e){}}
+function topOpenLayer(){
+  if($("jumpPop").classList.contains("on"))return "jumppop";
+  if($("tafsirSheet").classList.contains("on"))return "tafsir";
+  if($("settingsSheet").classList.contains("on"))return "settings";
+  if($("playMenuSheet").classList.contains("on"))return "playmenu";
+  if($("sidebar").classList.contains("on"))return state.sbSurah?"picker":"sidebar";
+  if(state.view==="adhkar"&&adhCat)return "adhkcat";
+  if($("ayahBar").classList.contains("on"))return "ayahbar";
+  if(state.view!=="mushaf")return "view";
+  return null;
+}
+function closeLayer(id){
+  switch(id){
+    case "jumppop":$("jumpPop").classList.remove("on");break;
+    case "tafsir":closeTafsir();break;
+    case "settings":closeSettings();break;
+    case "playmenu":closePlayMenu();break;
+    case "picker":state.sbSurah=null;renderTab("index");break;
+    case "sidebar":closeSidebar();break;
+    case "adhkcat":adhCat=null;renderAdhkar();break;
+    case "ayahbar":$("ayahBar").classList.remove("on");clearSelection();break;
+    case "view":setView("mushaf");break;
+  }
+}
+window.addEventListener("popstate",()=>{const id=topOpenLayer();if(id)closeLayer(id)});
+        
 /* ========== الإقلاع ========== */
 (function boot(){
+  try{history.replaceState({mfRoot:1},"")}catch(e){}
   const th=localStorage.getItem("mf_theme")||"light";
   document.documentElement.dataset.theme=th;
   $("themeBtn").textContent=th==="dark"?"\u{1F319}":"\u2600\uFE0F";
