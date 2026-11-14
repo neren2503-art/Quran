@@ -1,5 +1,5 @@
 /* خدمة العمل دون اتصال — مصحف الهاتف */
-const VERSION = 'quran-v1.8';
+const VERSION = 'quran-v1.9';
 const CORE = [
   './', './index.html', './manifest.json',
   './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png',
