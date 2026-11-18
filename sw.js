@@ -1,11 +1,7 @@
 /* ============================================================
-   عامل الخدمة لـ «مصحفي» — طبقة العمل دون اتصال
-   - ملفات التطبيق: الكاش أولاً
-   - صفحة التنقل: الشبكة أولاً (لضمان وصول التحديثات) ثم الكاش
-   - الخطوط: الكاش أولاً (تبقى متاحة دون اتصال بعد أول تحميل)
-   - واجهة نصوص القرآن: الشبكة أولاً ثم الكاش
+   عامل الخدمة لـ «مصحفي» — الإصدار ٦
 ============================================================ */
-const CACHE = 'mushafi-v1';
+const CACHE = 'mushafi-v6';
 const CORE = ['./', './index.html', './manifest.json', './icon.svg', './icon-maskable.svg'];
 
 async function cacheFirst(req){
@@ -14,7 +10,7 @@ async function cacheFirst(req){
   if (hit) return hit;
   try {
     const res = await fetch(req);
-    if (res && res.ok) c.put(req, res.clone()).catch(() => {});
+    if (res && res.status === 200) c.put(req, res.clone()).catch(() => {});
     return res;
   } catch (_) {
     const any = await caches.match(req, { ignoreSearch: true });
@@ -26,11 +22,24 @@ async function networkFirst(req){
   const c = await caches.open(CACHE);
   try {
     const res = await fetch(req);
-    if (res && res.ok) c.put(req, res.clone()).catch(() => {});
+    if (res && res.status === 200) c.put(req, res.clone()).catch(() => {});
     return res;
   } catch (_) {
     const hit = await c.match(req, { ignoreSearch: true });
     return hit || Response.error();
+  }
+}
+
+async function audioHandler(req){
+  const c = await caches.open(CACHE);
+  const hit = await c.match(req.url);
+  if (hit) return hit;
+  try {
+    const res = await fetch(req.url);
+    if (res && res.status === 200) c.put(req.url, res.clone()).catch(() => {});
+    return res;
+  } catch (_) {
+    return Response.error();
   }
 }
 
@@ -63,8 +72,10 @@ self.addEventListener('fetch', e => {
   }
   const h = url.hostname;
   if (h === 'fonts.googleapis.com' || h === 'fonts.gstatic.com'){
-    e.respondWith(cacheFirst(req));            /* الخطوط تبقى دون اتصال */
-  } else if (h === 'api.alquran.cloud'){
-    e.respondWith(networkFirst(req));          /* النصوص: محاولة شبكة ثم كاش */
+    e.respondWith(cacheFirst(req));
+  } else if (h === 'api.alquran.cloud' || h.endsWith('.api.radio-browser.info')){
+    e.respondWith(networkFirst(req));
+  } else if (h === 'cdn.islamic.network'){
+    e.respondWith(audioHandler(req));
   }
 });
