@@ -1,7 +1,14 @@
 /* ============================================================
-   عامل الخدمة لـ «مصحفي» — الإصدار ٦
+   عامل الخدمة لـ «مصحفي» — الإصدار ٨
+   - ملفات التطبيق: الكاش أولاً
+   - صفحة التنقل: الشبكة أولاً ثم الكاش (لوصول التحديثات)
+   - الخطوط: الكاش أولاً (متاحة دون اتصال)
+   - نصوص القرآن: الشبكة أولاً ثم الكاش
+   - الصوت (تلاوات): لا يُعترض إطلاقاً — يجلبه المتصفح مباشرة
+     من الخوادم، وهو الآلية التي أثبتت موثوقيتها، مع وجود
+     مصدر بديل مستقل لكل قارئ داخل التطبيق نفسه.
 ============================================================ */
-const CACHE = 'mushafi-v6';
+const CACHE = 'mushafi-v8';
 const CORE = ['./', './index.html', './manifest.json', './icon.svg', './icon-maskable.svg'];
 
 async function cacheFirst(req){
@@ -27,19 +34,6 @@ async function networkFirst(req){
   } catch (_) {
     const hit = await c.match(req, { ignoreSearch: true });
     return hit || Response.error();
-  }
-}
-
-async function audioHandler(req){
-  const c = await caches.open(CACHE);
-  const hit = await c.match(req.url);
-  if (hit) return hit;
-  try {
-    const res = await fetch(req.url);
-    if (res && res.status === 200) c.put(req.url, res.clone()).catch(() => {});
-    return res;
-  } catch (_) {
-    return Response.error();
   }
 }
 
@@ -72,10 +66,10 @@ self.addEventListener('fetch', e => {
   }
   const h = url.hostname;
   if (h === 'fonts.googleapis.com' || h === 'fonts.gstatic.com'){
-    e.respondWith(cacheFirst(req));
-  } else if (h === 'api.alquran.cloud' || h.endsWith('.api.radio-browser.info')){
-    e.respondWith(networkFirst(req));
-  } else if (h === 'cdn.islamic.network'){
-    e.respondWith(audioHandler(req));
+    e.respondWith(cacheFirst(req));            /* الخطوط */
+  } else if (h === 'api.alquran.cloud'){
+    e.respondWith(networkFirst(req));          /* نصوص القرآن */
   }
+  /* مضيفات التلاوات (cdn.islamic.network و everyayah.com)
+     تمر مباشرة إلى المتصفح دون أي تدخل — كما هي عليه الآن */
 });
